@@ -253,7 +253,8 @@ const HomeScreen: React.FC = () => {
                   imageUrl={recipe.imageUrl}
                   buttonText="View"
                   color="#FF9644"
-                  onPress={() => handleCardPress(recipe)}
+                    onPress={() => handleCardPress(recipe)}
+                    buttonAction={() => handleCardPress(recipe)}
                 />
               ))}
             </ScrollView>

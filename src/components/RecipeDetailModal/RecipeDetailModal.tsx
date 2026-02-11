@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   View,
   Text,
@@ -7,17 +7,56 @@ import {
   ScrollView,
   Image,
   Dimensions,
+  PanResponder,
+  Animated,
 } from 'react-native';
 import { RecipeDetailModalProps } from '../../types';
 import { recipeDetailModalStyles as styles } from '../../styles';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 export const RecipeDetailModal: React.FC<RecipeDetailModalProps> = ({
   visible,
   onClose,
   recipe,
 }) => {
+  const translateY = useRef(new Animated.Value(0)).current;
+  
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: (_, gestureState) => {
+        // Only respond to vertical swipes (dy > dx)
+        return Math.abs(gestureState.dy) > Math.abs(gestureState.dx) && gestureState.dy > 0;
+      },
+      onPanResponderMove: (_, gestureState) => {
+        // Only allow downward swipes
+        if (gestureState.dy > 0) {
+          translateY.setValue(gestureState.dy);
+        }
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        // If swiped down more than 150px, close the modal
+        if (gestureState.dy > 150) {
+          Animated.timing(translateY, {
+            toValue: height,
+            duration: 200,
+            useNativeDriver: true,
+          }).start(() => {
+            translateY.setValue(0);
+            onClose();
+          });
+        } else {
+          // Otherwise, spring back to original position
+          Animated.spring(translateY, {
+            toValue: 0,
+            useNativeDriver: true,
+          }).start();
+        }
+      },
+    })
+  ).current;
+
   if (!recipe) return null;
 
   return (
@@ -27,15 +66,33 @@ export const RecipeDetailModal: React.FC<RecipeDetailModalProps> = ({
       visible={visible}
       onRequestClose={onClose}
     >
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContainer}>
-          {/* Header with Close Button */}
-          <View style={styles.header}>
-            <Text style={styles.headerTitle}>Recipe Details</Text>
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <Text style={styles.closeButtonText}>✕</Text>
-            </TouchableOpacity>
-          </View>
+      <TouchableOpacity 
+        style={styles.modalOverlay} 
+        activeOpacity={1} 
+        onPress={onClose}
+      >
+        <Animated.View 
+          style={[
+            styles.modalContainer,
+            {
+              transform: [{ translateY }],
+            },
+          ]}
+          {...panResponder.panHandlers}
+        >
+          <TouchableOpacity activeOpacity={1}>
+            {/* Drag Handle */}
+            <View style={styles.dragHandleContainer}>
+              <View style={styles.dragHandle} />
+            </View>
+
+            {/* Header with Close Button */}
+            <View style={styles.header}>
+              <Text style={styles.headerTitle}>Recipe Details</Text>
+              <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+                <Text style={styles.closeButtonText}>Close</Text>
+              </TouchableOpacity>
+            </View>
 
           <ScrollView 
             contentContainerStyle={styles.scrollContent}
@@ -127,15 +184,16 @@ export const RecipeDetailModal: React.FC<RecipeDetailModalProps> = ({
             {/* Action Buttons */}
             <View style={styles.actionButtons}>
               <TouchableOpacity style={styles.favoriteButton}>
-                <Text style={styles.favoriteButtonText}>Add to Favorites</Text>
+                <Text style={styles.favoriteButtonText}>❤️ Add to Favorites</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.startButton}>
-                <Text style={styles.startButtonText}>Start Cooking</Text>
+                <Text style={styles.startButtonText}>🍳 Start Cooking</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
-        </View>
-      </View>
+          </TouchableOpacity>
+        </Animated.View>
+      </TouchableOpacity>
     </Modal>
   );
 };
