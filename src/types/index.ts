@@ -4,3 +4,4 @@ export * from './Sidebar.types';
 export * from './BottomNavigation.types';
 export * from './DashboardCard.types';
 export * from './RecipeCard.types';
+export * from './RecipeDetailModal.types';

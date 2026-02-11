@@ -6,3 +6,4 @@ export { styles as homeScreenStyles } from './HomeScreen.styles';
 export { styles as dashboardCardStyles } from './DashboardCard.styles';
 export { styles as quickStatStyles } from './QuickStat.styles';
 export { styles as recipeCardStyles } from './RecipeCard.styles';
+export { recipeDetailModalStyles } from './RecipeDetailModal.styles';

@@ -22,7 +22,7 @@ export default function App() {
     // Simulate loading time (e.g., fetching data, initializing app)
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2000);
+    }, 4000); // 4 seconds
 
     return () => clearTimeout(timer);
   }, []);

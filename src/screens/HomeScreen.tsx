@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Dimensions, Animated, Image } from 'react-native';
-import { Sidebar, MenuItem, RecipeCard, QuickStat } from '../components';
+import { Sidebar, MenuItem, RecipeCard, QuickStat, RecipeDetailModal, Recipe } from '../components';
 import { homeScreenStyles as styles } from '../styles';
 
 const { width } = Dimensions.get('window');
@@ -9,8 +9,102 @@ const { width } = Dimensions.get('window');
 const HomeScreen: React.FC = () => {
   const [activeSidebarItem, setActiveSidebarItem] = useState('home');
   const [showSidebar, setShowSidebar] = useState(false);
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
   const burgerAnim = React.useRef(new Animated.Value(0)).current;
   const sidebarAnim = React.useRef(new Animated.Value(-280)).current;
+
+  // Recipe data
+  const featuredRecipes: Recipe[] = [
+    {
+      title: "Pasta Carbonara",
+      subtitle: "Italian",
+      rating: "4.8",
+      reviews: "324 Reviews",
+      imageUrl: "https://images.unsplash.com/photo-1612874742237-6526221588e3?w=400&h=300&fit=crop",
+      prepTime: "15 min",
+      cookTime: "20 min",
+      servings: "4",
+      description: "Classic Italian pasta dish with eggs, cheese, and crispy pancetta. Rich, creamy, and utterly delicious!",
+      ingredients: [
+        "400g spaghetti",
+        "4 large eggs",
+        "100g Pecorino Romano cheese, grated",
+        "200g pancetta, diced",
+        "Freshly ground black pepper",
+        "Salt to taste"
+      ],
+      instructions: [
+        "Bring a large pot of salted water to boil",
+        "Cook pasta according to package instructions until al dente",
+        "Meanwhile, cook pancetta in a large skillet until crispy",
+        "Beat eggs with grated cheese in a bowl",
+        "Reserve 1 cup pasta water, then drain pasta",
+        "Toss hot pasta with pancetta, remove from heat",
+        "Quickly mix in egg mixture, adding pasta water to create creamy sauce",
+        "Season with black pepper and serve immediately"
+      ]
+    },
+    {
+      title: "Chicken Curry",
+      subtitle: "Indian",
+      rating: "4.6",
+      reviews: "256 Reviews",
+      imageUrl: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=400&h=300&fit=crop",
+      prepTime: "20 min",
+      cookTime: "40 min",
+      servings: "6",
+      description: "Aromatic and flavorful Indian chicken curry with a rich, spiced tomato-based sauce.",
+      ingredients: [
+        "800g chicken thighs, cut into pieces",
+        "2 onions, finely chopped",
+        "4 cloves garlic, minced",
+        "2 tbsp curry powder",
+        "1 can coconut milk",
+        "400g crushed tomatoes",
+        "Fresh cilantro for garnish"
+      ],
+      instructions: [
+        "Heat oil in a large pot over medium heat",
+        "Add onions and cook until golden brown",
+        "Add garlic and curry powder, cook for 1 minute",
+        "Add chicken pieces and brown on all sides",
+        "Pour in coconut milk and crushed tomatoes",
+        "Simmer for 30 minutes until chicken is cooked through",
+        "Garnish with fresh cilantro and serve with rice"
+      ]
+    },
+    {
+      title: "Sushi Roll",
+      subtitle: "Japanese",
+      rating: "4.9",
+      reviews: "412 Reviews",
+      imageUrl: "https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=400&h=300&fit=crop",
+      prepTime: "30 min",
+      cookTime: "20 min",
+      servings: "4",
+    },
+    {
+      title: "Beef Tacos",
+      subtitle: "Mexican",
+      rating: "4.7",
+      reviews: "389 Reviews",
+      imageUrl: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&h=300&fit=crop",
+      prepTime: "10 min",
+      cookTime: "15 min",
+      servings: "4",
+    },
+    {
+      title: "Caesar Salad",
+      subtitle: "American",
+      rating: "4.5",
+      reviews: "298 Reviews",
+      imageUrl: "https://images.unsplash.com/photo-1546793665-c74683f339c1?w=400&h=300&fit=crop",
+      prepTime: "15 min",
+      cookTime: "0 min",
+      servings: "2",
+    }
+  ];
 
   // Sidebar menu items
   const sidebarMenuItems: MenuItem[] = [
@@ -43,9 +137,23 @@ const HomeScreen: React.FC = () => {
     setShowSidebar(!showSidebar);
   };
 
-  const handleCardPress = (cardName: string) => {
-    console.log('Card pressed:', cardName);
-    setActiveSidebarItem(cardName);
+  const handleCardPress = (recipe: Recipe) => {
+    console.log('Recipe pressed:', recipe.title);
+    setSelectedRecipe(recipe);
+    setModalVisible(true);
+  };
+
+  const handleCategoryPress = (categoryName: string) => {
+    console.log('Category pressed:', categoryName);
+    setActiveSidebarItem(categoryName);
+    // Add navigation logic to category browse screen
+  };
+
+  const handleModalClose = () => {
+    setModalVisible(false);
+    setTimeout(() => {
+      setSelectedRecipe(null);
+    }, 300); // Wait for modal animation to complete
   };
 
   return (
@@ -135,56 +243,20 @@ const HomeScreen: React.FC = () => {
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.horizontalScroll}
             >
-              <RecipeCard
-                title="Pasta Carbonara"
-                subtitle="Italian"
-                rating="4.8"
-                reviews="324 Reviews"
-                imageUrl="https://images.unsplash.com/photo-1612874742237-6526221588e3?w=400&h=300&fit=crop"
-                buttonText="View"
-                color="#FF9644"
-                onPress={() => handleCardPress('carbonara')}
-              />
-              <RecipeCard
-                title="Chicken Curry"
-                subtitle="Indian"
-                rating="4.6"
-                reviews="256 Reviews"
-                imageUrl="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=400&h=300&fit=crop"
-                buttonText="View"
-                color="#FF9644"
-                onPress={() => handleCardPress('curry')}
-              />
-              <RecipeCard
-                title="Sushi Roll"
-                subtitle="Japanese"
-                rating="4.9"
-                reviews="412 Reviews"
-                imageUrl="https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=400&h=300&fit=crop"
-                buttonText="View"
-                color="#FF9644"
-                onPress={() => handleCardPress('sushi')}
-              />
-              <RecipeCard
-                title="Beef Tacos"
-                subtitle="Mexican"
-                rating="4.7"
-                reviews="389 Reviews"
-                imageUrl="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&h=300&fit=crop"
-                buttonText="View"
-                color="#FF9644"
-                onPress={() => handleCardPress('tacos')}
-              />
-              <RecipeCard
-                title="Caesar Salad"
-                subtitle="American"
-                rating="4.5"
-                reviews="298 Reviews"
-                imageUrl="https://images.unsplash.com/photo-1546793665-c74683f339c1?w=400&h=300&fit=crop"
-                buttonText="View"
-                color="#FF9644"
-                onPress={() => handleCardPress('caesar')}
-              />
+              {featuredRecipes.map((recipe, index) => (
+                <RecipeCard
+                  key={index}
+                  title={recipe.title}
+                  subtitle={recipe.subtitle}
+                  rating={recipe.rating}
+                  reviews={recipe.reviews}
+                  imageUrl={recipe.imageUrl}
+                  buttonText="View"
+                  color="#FF9644"
+                    onPress={() => handleCardPress(recipe)}
+                    buttonAction={() => handleCardPress(recipe)}
+                />
+              ))}
             </ScrollView>
           </View>
 
@@ -207,7 +279,7 @@ const HomeScreen: React.FC = () => {
                 imageUrl="https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=400&h=300&fit=crop"
                 buttonText="Browse"
                 color="#562F00"
-                onPress={() => handleCardPress('breakfast')}
+                onPress={() => handleCategoryPress('breakfast')}
               />
               <RecipeCard
                 title="Desserts"
@@ -217,7 +289,7 @@ const HomeScreen: React.FC = () => {
                 imageUrl="https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400&h=300&fit=crop"
                 buttonText="Browse"
                 color="#562F00"
-                onPress={() => handleCardPress('desserts')}
+                onPress={() => handleCategoryPress('desserts')}
               />
               <RecipeCard
                 title="Vegetarian"
@@ -227,7 +299,7 @@ const HomeScreen: React.FC = () => {
                 imageUrl="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop"
                 buttonText="Browse"
                 color="#562F00"
-                onPress={() => handleCardPress('vegetarian')}
+                onPress={() => handleCategoryPress('vegetarian')}
               />
               <RecipeCard
                 title="Seafood"
@@ -237,7 +309,7 @@ const HomeScreen: React.FC = () => {
                 imageUrl="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop"
                 buttonText="Browse"
                 color="#562F00"
-                onPress={() => handleCardPress('seafood')}
+                onPress={() => handleCategoryPress('seafood')}
               />
               <RecipeCard
                 title="Appetizers"
@@ -247,7 +319,7 @@ const HomeScreen: React.FC = () => {
                 imageUrl="https://images.unsplash.com/photo-1541529086526-db283c563270?w=400&h=300&fit=crop"
                 buttonText="Browse"
                 color="#562F00"
-                onPress={() => handleCardPress('appetizers')}
+                onPress={() => handleCategoryPress('appetizers')}
               />
             </ScrollView>
           </View>
@@ -267,6 +339,13 @@ const HomeScreen: React.FC = () => {
           </View>
         </ScrollView>
       </View>
+
+      {/* Recipe Detail Modal */}
+      <RecipeDetailModal
+        visible={modalVisible}
+        onClose={handleModalClose}
+        recipe={selectedRecipe}
+      />
     </View>
   );
 };
