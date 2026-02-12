@@ -305,7 +305,7 @@ const HomeScreen: React.FC = () => {
           {/* Quick Actions Section - Vertical */}
           <View style={styles.sectionContainer}>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>⚡ Quick Actions</Text>
+              <Text style={styles.sectionTitle}>Quick Actions</Text>
             </View>
             
             <View style={styles.statsContainer}>
