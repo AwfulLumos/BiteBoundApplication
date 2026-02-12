@@ -37,7 +37,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({
   };
 
   return (
-    <Animated.View style={[{ transform: [{ scale: scaleAnim }] }, { width: CARD_WIDTH }]}>
+    <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
       <TouchableOpacity
         activeOpacity={0.9}
         onPressIn={handlePressIn}

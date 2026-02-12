@@ -1,26 +1,25 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
 const { width: screenWidth } = Dimensions.get('window');
-// Optimized card width: 78% of screen for better viewing with multiple cards
-const CARD_WIDTH = screenWidth * 0.78;
+// Medium card width: 70% of screen for comfortable viewing with more cards visible
+const CARD_WIDTH = screenWidth * 0.70;
 
 export const styles = StyleSheet.create({
   card: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 24,
-    padding: 18,
-    marginRight: 20,
+    borderRadius: 16,
+    padding: 0,
+    marginRight: 16,
     marginVertical: 8,
     width: CARD_WIDTH,
-    minWidth: CARD_WIDTH,
-    maxWidth: CARD_WIDTH,
     shadowColor: '#562F00',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.15,
-    shadowRadius: 15,
-    elevation: 8,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
     borderWidth: 2,
     borderColor: '#FFCE99',
+    overflow: 'hidden',
   },
   cardContent: {
     flex: 1,
@@ -29,51 +28,54 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 14,
+    marginBottom: 0,
+    padding: 12,
+    paddingBottom: 8,
   },
   titleContainer: {
     flex: 1,
-    marginRight: 10,
+    marginRight: 6,
   },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    fontFamily: 'Oswald_600SemiBold',
+    fontFamily: 'Oswald_700Bold',
     color: '#562F00',
-    marginBottom: 4,
+    marginBottom: 2,
   },
   subtitle: {
     fontSize: 13,
     fontFamily: 'NunitoSans_400Regular',
-    color: '#8B5A1A',
+    color: '#FF9644',
   },
   ratingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFFDF1',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: '#FFCE99',
   },
   ratingIcon: {
-    fontSize: 14,
-    marginRight: 4,
+    fontSize: 13,
+    marginRight: 3,
   },
   ratingText: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: 'bold',
     fontFamily: 'Oswald_600SemiBold',
     color: '#562F00',
   },
   imageContainer: {
-    backgroundColor: '#FFFDF1',
-    borderRadius: 18,
+    backgroundColor: '#F5F5F5',
+    borderRadius: 12,
     height: 140,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 0,
+    marginHorizontal: 12,
     overflow: 'hidden',
   },
   image: {
@@ -81,12 +83,14 @@ export const styles = StyleSheet.create({
     height: '100%',
   },
   imageIcon: {
-    fontSize: 48,
+    fontSize: 40,
   },
   bottomRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    padding: 12,
+    paddingTop: 10,
   },
   reviews: {
     fontSize: 12,
@@ -96,7 +100,7 @@ export const styles = StyleSheet.create({
   },
   button: {
     paddingHorizontal: 20,
-    paddingVertical: 12,
+    paddingVertical: 11,
     borderRadius: 24,
     shadowColor: '#562F00',
     shadowOffset: { width: 0, height: 3 },

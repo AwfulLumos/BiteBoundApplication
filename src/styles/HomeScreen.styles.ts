@@ -75,7 +75,7 @@ export const styles = StyleSheet.create({
     borderColor: '#FFFFFF',
   },
   headerTitle: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
     fontFamily: 'Oswald_700Bold',
     color: '#FFFFFF',
@@ -93,15 +93,14 @@ export const styles = StyleSheet.create({
     paddingTop: 16,
   },
   sectionContainer: {
-    marginBottom: 32,
-    paddingVertical: 4,
+      marginBottom: 5,
   },
   sectionHeader: {
     paddingHorizontal: 20,
     marginBottom: 18,
   },
   sectionTitle: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
     fontFamily: 'Oswald_700Bold',
     color: '#562F00',
