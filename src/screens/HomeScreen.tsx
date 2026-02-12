@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Dimensions, Animated, Image } from 'react-native';
-import { Sidebar, MenuItem, RecipeCard, QuickStat, RecipeDetailModal, Recipe } from '../components';
+import { Sidebar, MenuItem, RecipeCard, QuickStat, RecipeDetailModal, Recipe, ScreenHeader } from '../components';
+import RecipesScreen from './RecipesScreen';
 import { homeScreenStyles as styles } from '../styles';
 
 const { width } = Dimensions.get('window');
@@ -11,7 +12,7 @@ const HomeScreen: React.FC = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const burgerAnim = React.useRef(new Animated.Value(0)).current;
+  const [currentScreen, setCurrentScreen] = useState<'home' | 'recipes'>('home');
   const sidebarAnim = React.useRef(new Animated.Value(-280)).current;
 
   // Recipe data
@@ -119,16 +120,19 @@ const HomeScreen: React.FC = () => {
   const handleSidebarItemPress = (itemId: string) => {
     setActiveSidebarItem(itemId);
     console.log('Sidebar item pressed:', itemId);
-    // Add navigation logic here
+    
+    // Navigate based on sidebar item
+    if (itemId === 'recipes') {
+      setCurrentScreen('recipes');
+      toggleSidebar(); // Close sidebar after navigation
+    } else if (itemId === 'home') {
+      setCurrentScreen('home');
+      toggleSidebar();
+    }
+    // Add more navigation logic for other items here
   };
 
   const toggleSidebar = () => {
-    const toValue = showSidebar ? 0 : 1;
-    Animated.timing(burgerAnim, {
-      toValue,
-      duration: 350,
-      useNativeDriver: true,
-    }).start();
     Animated.timing(sidebarAnim, {
       toValue: showSidebar ? -280 : 0,
       duration: 350,
@@ -184,49 +188,23 @@ const HomeScreen: React.FC = () => {
 
       {/* Main content area */}
       <View style={styles.mainContent}>
+        {currentScreen === 'recipes' ? (
+          // Recipes Screen
+          <RecipesScreen 
+            onBack={() => setCurrentScreen('home')} 
+            onMenuPress={toggleSidebar}
+          />
+        ) : (
+          // Home Screen Content
+          <>
         {/* Header with menu toggle */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={toggleSidebar} style={styles.menuButton}>
-            <Animated.View
-              style={[
-                styles.hamburgerContainer,
-                {
-                  transform: [
-                    {
-                      rotate: burgerAnim.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: ['0deg', '90deg'],
-                      }),
-                    },
-                    {
-                      scale: burgerAnim.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [1, 1.1],
-                      }),
-                    },
-                  ],
-                },
-              ]}
-            >
-              <View style={styles.hamburgerLine} />
-              <View style={styles.hamburgerLine} />
-              <View style={styles.hamburgerLine} />
-            </Animated.View>
-          </TouchableOpacity>
-          <View style={styles.headerContent}>
-            <View style={styles.headerTitleRow}>
-              <Image 
-                source={require('../../assets/Logos/BiteBoundLogo.jpg')} 
-                style={styles.headerLogo}
-                resizeMode="contain"
-              />
-              <View>
-                <Text style={styles.headerTitle}>Dashboard</Text>
-                <Text style={styles.headerSubtitle}>Welcome back Chef!</Text>
-              </View>
-            </View>
-          </View>
-        </View>
+        <ScreenHeader
+          title="Home"
+          subtitle="Welcome back Chef!"
+          onMenuPress={toggleSidebar}
+          showLogo={true}
+          logoSource={require('../../assets/Logos/BiteBoundLogo.jpg')}
+        />
 
         <ScrollView 
           contentContainerStyle={styles.scrollContent}
@@ -235,7 +213,7 @@ const HomeScreen: React.FC = () => {
           {/* Featured Recipes Section - Horizontal Scroll */}
           <View style={styles.sectionContainer}>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>🌟 Featured Recipes</Text>
+              <Text style={styles.sectionTitle}>Featured Recipes</Text>
               <Text style={styles.sectionSubtitle}>Sorted by popularity ↓</Text>
             </View>
             <ScrollView 
@@ -263,7 +241,7 @@ const HomeScreen: React.FC = () => {
           {/* Popular Categories Section - Horizontal Scroll */}
           <View style={styles.sectionContainer}>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>🔥 Popular Categories</Text>
+              <Text style={styles.sectionTitle}>Popular Categories</Text>
               <Text style={styles.sectionSubtitle}>Sorted by higher rating ↓</Text>
             </View>
             <ScrollView 
@@ -338,6 +316,8 @@ const HomeScreen: React.FC = () => {
             </View>
           </View>
         </ScrollView>
+        </>
+        )}
       </View>
 
       {/* Recipe Detail Modal */}

@@ -9,6 +9,13 @@ export const recipeDetailModalStyles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'flex-end',
   },
+  overlayTouchable: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
   modalContainer: {
     backgroundColor: '#FFF',
     borderTopLeftRadius: 24,
@@ -45,8 +52,8 @@ export const recipeDetailModalStyles = StyleSheet.create({
     color: Colors.primary,
   },
   closeButton: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
     borderRadius: 20,
     backgroundColor: '#FFF',
     borderWidth: 1,
@@ -56,14 +63,14 @@ export const recipeDetailModalStyles = StyleSheet.create({
     marginLeft: 8,
   },
   closeButtonText: {
-    fontSize: 15,
+    fontSize: 18,
     color: Colors.primary,
     fontWeight: '700',
     letterSpacing: 0.5,
     textTransform: 'none',
   },
   scrollContent: {
-    paddingBottom: 32,
+      paddingBottom: 20,
   },
   recipeImage: {
     width: width,
@@ -199,7 +206,7 @@ export const recipeDetailModalStyles = StyleSheet.create({
     paddingTop: 4,
   },
   actionButtons: {
-    padding: 20,
+      padding: 5,
     gap: 12,
   },
   favoriteButton: {

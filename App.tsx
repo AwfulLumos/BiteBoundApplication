@@ -22,7 +22,7 @@ export default function App() {
     // Simulate loading time (e.g., fetching data, initializing app)
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 4000); // 4 seconds
+    }, 1500); // 1.5 seconds
 
     return () => clearTimeout(timer);
   }, []);
@@ -31,7 +31,7 @@ export default function App() {
     return (
       <>
         <LoadingScreen 
-          message="Loading BiteBound..." 
+          message="Loading BiteBound..."
           size="large" 
           color="#FF9644" 
         />
